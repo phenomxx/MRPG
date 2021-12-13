@@ -238,7 +238,8 @@ enum
 	itLittleBagGold = 17,				// Gives 10-50 gold
 	itPotionResurrection = 25,			// Resurrection potion
 	itExplosiveGun = 33,				// Explosion for gun
-	itExplosiveShotgun = 34,			// Explosion for shotgun
+	itExplosiveShotgun = 34,
+	itExplosiveRifle = 71,			// Explosion for shotgun
 	itTicketResetClassStats = 38,		// Ticket to reset the statistics of class upgrades
 	itModePVP = 39,						// PVP mode setting
 	itTicketResetWeaponStats = 40,		// Ticket to reset the statistics cartridge upgrade

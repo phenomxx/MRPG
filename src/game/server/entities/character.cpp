@@ -373,13 +373,14 @@ void CCharacter::FireWeapon()
 		} break;
 
 		case WEAPON_LASER:
-		{
+		{	
+			const bool IsExplosive = m_pPlayer->GetItem(itExplosiveRifle).IsEquipped();
 			const int ShotSpread = min(1 + m_pPlayer->GetAttributeCount(Stats::StSpreadRifle), 36);
 			for (int i = 1; i < ShotSpread; ++i)
 			{
 				const float Spreading = ((0.0058945f*(9.0f*ShotSpread)/2)) - (0.0058945f*(9.0f*i));
 				const float a = GetAngle(Direction) + Spreading;
-				new CLaser(GameWorld(), m_Pos, vec2(cosf(a), sinf(a)), GS()->Tuning()->m_LaserReach, m_pPlayer->GetCID());
+				new CLaser(GameWorld(), m_Pos, vec2(cosf(a), sinf(a)),IsExplosive, GS()->Tuning()->m_LaserReach, m_pPlayer->GetCID());
 			}
 			GS()->CreateSound(m_Pos, SOUND_LASER_FIRE);
 		} break;

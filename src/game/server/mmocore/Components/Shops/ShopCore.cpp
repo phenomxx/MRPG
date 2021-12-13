@@ -242,7 +242,7 @@ bool CShopCore::BuyShopItem(CPlayer* pPlayer, int ID)
 	if(!pRes->next())
 		return false;
 	int Valuev = 1;
-	int Enchantx;
+	int Enchantxx;
 	const int ItemID = pRes->getInt("ItemID");
 	CItemData& pPlayerBuyightItem = pPlayer->GetItem(ItemID);
 	if(pPlayerBuyightItem.m_Value > 0 && pPlayerBuyightItem.Info().IsEnchantable() && pPlayerBuyightItem.m_ItemID != 50)
@@ -290,8 +290,8 @@ bool CShopCore::BuyShopItem(CPlayer* pPlayer, int ID)
 		return false;
 		if(pPlayerBuyightItem.m_ItemID == 50 && pPlayerBuyightItem.m_Value >=1)
 		{
-			Enchantx=pPlayerBuyightItem.m_Value;
-			pPlayerBuyightItem.Add(Valuev, 1, Enchantx);
+			Enchantxx=pPlayerBuyightItem.m_Value;
+			pPlayerBuyightItem.Add(Valuev, 1, Enchantxx);
 			GS()->Chat(ClientID, "You exchange {STR}x{INT} to {STR}x{INT}.", pPlayerBuyightItem.Info().GetName(), Valuev, GS()->GetItemInfo(RequiredItemID).GetName(), Price);
 			return true;
 		}

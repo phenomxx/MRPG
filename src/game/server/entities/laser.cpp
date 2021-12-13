@@ -6,7 +6,7 @@
 #include <generated/server_data.h>
 #include "character.h"
 
-CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, float StartEnergy, int Owner)
+CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, bool expl, float StartEnergy, int Owner)
 : CEntity(pGameWorld, CGameWorld::ENTTYPE_LASER, Pos)
 {
 	m_Owner = Owner;
@@ -14,6 +14,8 @@ CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, float StartEner
 	m_Dir = Direction;
 	m_Bounces = 0;
 	m_EvalTick = 0;
+	m_Explosive = expl;
+	
 	GameWorld()->InsertEntity(this);
 	DoBounce();
 }
@@ -29,6 +31,8 @@ bool CLaser::HitCharacter(vec2 From, vec2 To)
 	m_From = From;
 	m_Pos = At;
 	m_Energy = -1;
+	if(m_Explosive)
+	GS()->CreateExplosion(m_Pos, m_Owner, WEAPON_LASER, g_pData->m_Weapons.m_aId[WEAPON_LASER].m_Damage);
 	pHit->TakeDamage(vec2(0.f, 0.f), g_pData->m_Weapons.m_aId[WEAPON_LASER].m_Damage, m_Owner, WEAPON_LASER);
 	return true;
 }
@@ -39,6 +43,7 @@ void CLaser::DoBounce()
 
 	if(m_Energy < 0 || !GS()->GetPlayerChar(m_Owner))
 	{
+		
 		GS()->m_World.DestroyEntity(this);
 		return;
 	}
@@ -67,6 +72,9 @@ void CLaser::DoBounce()
 				m_Energy = -1;
 
 			GS()->CreateSound(m_Pos, SOUND_LASER_BOUNCE);
+			if 	(m_Explosive)
+			GS()->CreateExplosion(m_Pos, -1, WEAPON_LASER, g_pData->m_Weapons.m_aId[WEAPON_LASER].m_Damage);
+			
 		}
 	}
 	else
@@ -77,6 +85,9 @@ void CLaser::DoBounce()
 			m_Pos = To;
 			m_Energy = -1;
 		}
+		if 	(m_Explosive)
+			GS()->CreateExplosion(m_Pos, -1, WEAPON_LASER, g_pData->m_Weapons.m_aId[WEAPON_LASER].m_Damage);
+		
 	}
 }
 
@@ -89,6 +100,7 @@ void CLaser::Tick()
 {
 	if(GS()->Collision()->GetParseTilesAt(m_Pos.x, m_Pos.y) == TILE_INVISIBLE_WALL)
 	{
+		
 		Reset();
 		return;
 	}
