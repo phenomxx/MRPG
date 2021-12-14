@@ -239,7 +239,8 @@ enum
 	itPotionResurrection = 25,			// Resurrection potion
 	itExplosiveGun = 33,				// Explosion for gun
 	itExplosiveShotgun = 34,
-	itExplosiveRifle = 71,			// Explosion for shotgun
+	itExplosiveRifle = 71,
+	itSpear = 10025,			// Explosion for shotgun
 	itTicketResetClassStats = 38,		// Ticket to reset the statistics of class upgrades
 	itModePVP = 39,						// PVP mode setting
 	itTicketResetWeaponStats = 40,		// Ticket to reset the statistics cartridge upgrade

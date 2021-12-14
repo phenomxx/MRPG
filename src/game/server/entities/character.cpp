@@ -272,6 +272,24 @@ void CCharacter::FireWeapon()
 	{
 		case WEAPON_HAMMER:
 		{
+				if (m_pPlayer->GetItem(itSpear).IsEquipped())
+				{
+					const int ShotSpread = 2;
+					CMsgPacker Msg(NETMSGTYPE_SV_EXTRAPROJECTILE);
+					Msg.AddInt(ShotSpread);
+					for (int i = 1; i <= ShotSpread; ++i)
+					{
+				new CProjectile(GameWorld(), WEAPON_SHOTGUN, m_pPlayer->GetCID(), ProjStartPos,
+					Direction,
+					(int)(Server()->TickSpeed() * GS()->Tuning()->m_ShotgunLifetime),
+					g_pData->m_Weapons.m_Hammer.m_pBase->m_Damage, 0, 0, 15, WEAPON_SHOTGUN);
+					}
+					
+					m_ReloadTimer = Server()->TickSpeed() /3;
+						
+				}
+
+
 			if (InteractiveHammer(Direction, ProjStartPos))
 			{
 				m_ReloadTimer = Server()->TickSpeed() / 3;
@@ -305,12 +323,14 @@ void CCharacter::FireWeapon()
 					GS()->ChatFollow(m_pPlayer->GetCID(), "You start dialogue with {STR}!", DataBotInfo::ms_aDataBot[BotID].m_aNameBot);
 					continue;
 				}
+				
 
 				if (pTarget->m_Core.m_SkipCollideTees)
 					continue;
-
+		//if (!m_pPlayer->GetItem(itSpear).IsEquipped())
+		{
 				if(length(pTarget->m_Pos-ProjStartPos) > 0.0f)
-					GS()->CreateHammerHit(pTarget->m_Pos-normalize(pTarget->m_Pos-ProjStartPos) * GetProximityRadius() * Radius);
+					GS()->CreateHammerHit(pTarget->m_Pos- normalize(pTarget->m_Pos-ProjStartPos) * GetProximityRadius() * Radius);
 				else
 					GS()->CreateHammerHit(ProjStartPos);
 
@@ -320,6 +340,8 @@ void CCharacter::FireWeapon()
 
 				pTarget->TakeDamage(vec2(0.f, -1.f) + normalize(Dir + vec2(0.f, -1.1f)) * 10.0f, g_pData->m_Weapons.m_Hammer.m_pBase->m_Damage, m_pPlayer->GetCID(), m_ActiveWeapon);
 				Hits = true;
+				continue;
+		}
 			}
 			if(Hits)
 				m_ReloadTimer = Server()->TickSpeed()/3;
